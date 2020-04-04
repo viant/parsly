@@ -1,2 +1,2 @@
-# Parsely -  parsing utility.
+# Parsly -  parsing utility.
 
