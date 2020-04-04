@@ -1,0 +1,7 @@
+.DS_Store
+.idea
+vendor
+local_test.go
+scratchpad
+scratchpad/
+*.prof
