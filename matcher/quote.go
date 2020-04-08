@@ -1,33 +1,35 @@
 package matcher
 
 import (
-	"github.com/viant/parsly/lex"
+	"github.com/viant/parsly"
 	"unicode/utf8"
 )
 
-type utfQuote struct {
+type RuneQuote struct {
 	escape rune
 	value  rune
 }
 
-//Match matches quoted characters
-func (m *utfQuote) Match(input []byte, offset int) int {
+//TokenMatch matches quoted characters
+func (m *RuneQuote) Match(cursor *parsly.Cursor) int {
 	var matched = 0
-	inputSize:=len(input)
-	runeValue, width := utf8.DecodeRune(input[offset:])
+	inputSize:=cursor.InputSize
+	input := cursor.Input
+	pos := cursor.Pos
+	runeValue, width := utf8.DecodeRune(input[pos:])
 	if runeValue != m.value {
 		return 0
 	}
 	matched += width
-	for i := offset  + matched; i < inputSize ; i++ {
-		runeValue, width = utf8.DecodeRune(input[offset+matched:])
+	for i := pos  + matched; i < inputSize ; i++ {
+		runeValue, width = utf8.DecodeRune(input[pos+matched:])
 		matched += width
-		hasMore := offset+matched < inputSize
+		hasMore := pos+matched < inputSize
 		if runeValue == m.escape {
 			if ! hasMore {
 				return 0
 			}
-			runeValue, width = utf8.DecodeRune(input[offset+matched:])
+			runeValue, width = utf8.DecodeRune(input[pos+matched:])
 			matched += width
 			continue
 		}
@@ -38,21 +40,32 @@ func (m *utfQuote) Match(input []byte, offset int) int {
 	return 0
 }
 
-type quote struct {
+func NewRuneQuote(escape, value rune) *RuneQuote {
+	return &RuneQuote{
+		escape: escape,
+		value:  value,
+	}
+}
+
+
+
+type ByteQuote struct {
 	escape byte
 	value  byte
 }
 
-//Match matches quoted characters
-func (m *quote) Match(input []byte, offset int) int {
+//TokenMatch matches quoted characters
+func (m *ByteQuote) Match(cursor *parsly.Cursor) int {
 	var matched = 0
-	inputSize:=len(input)
-	value := input[offset]
+	inputSize:=cursor.InputSize
+	input := cursor.Input
+	pos := cursor.Pos
+	value := input[pos]
 	if value != m.value {
 		return 0
 	}
 	matched++
-	for i := offset + matched; i < inputSize ; i++ {
+	for i := pos + matched; i < inputSize ; i++ {
 		value = input[i]
 		matched++
 		hasMore := i + 1 < inputSize
@@ -71,17 +84,18 @@ func (m *quote) Match(input []byte, offset int) int {
 	return 0
 }
 
-
-//NewQuote creates a new utfQuote matcher
-func NewQuote(val, escape rune) lex.Matcher {
-	if isByte(val) && isByte(escape) {
-		return &quote{
-			escape: byte(escape),
-			value:  byte(val),
-		}
-	}
-	return &utfQuote{
-		value:  val,
+//NewByteQuote creates a byte quote
+func NewByteQuote(escape, value byte) *ByteQuote {
+	return &ByteQuote{
 		escape: escape,
+		value:  value,
 	}
+}
+
+//NewQuote creates a new RuneQuote matcher
+func NewQuote(val, escape rune) parsly.Matcher {
+	if isByte(val) && isByte(escape) {
+		return NewByteQuote(byte(escape), byte(val))
+	}
+	return NewRuneQuote(escape, val)
 }

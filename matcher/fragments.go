@@ -2,18 +2,47 @@ package matcher
 
 import (
 	"bytes"
-	"github.com/viant/parsly/lex"
-	"github.com/viant/parsly/matcher/option"
+	"github.com/viant/parsly"
 )
 
-type fragments struct {
+type FragmentsFold struct {
 	values [][]byte
 }
 
-func (d *fragments) Match(input []byte, offset int) (matched int) {
+func (d *FragmentsFold) Match(cursor *parsly.Cursor) (matched int) {
+	size := cursor.InputSize
+	offset := cursor.Pos
+	input := cursor.Input
 	for _, candidate := range d.values {
-		if offset+len(candidate) < len(input) {
-			if bytes.EqualFold(input[offset:offset+len(candidate)], candidate) {
+		matchEnd := offset+len(candidate)
+		if matchEnd < size {
+			if bytes.EqualFold(input[offset:matchEnd], candidate) {
+				return len(candidate)
+			}
+		}
+	}
+	return matched
+}
+
+//NewFragmentsFold returns fragments folds
+func NewFragmentsFold(values ...[]byte) *FragmentsFold {
+	return &FragmentsFold{values:values}
+}
+
+
+
+type Fragments  struct {
+	values [][]byte
+}
+
+func (d *Fragments) Match(cursor *parsly.Cursor) (matched int) {
+	size := cursor.InputSize
+	offset := cursor.Pos
+	input := cursor.Input
+	for _, candidate := range d.values {
+		matchEnd := offset+len(candidate)
+		if matchEnd < size {
+			if bytes.Equal(input[offset:matchEnd], candidate) {
 				return len(candidate)
 			}
 		}
@@ -22,30 +51,11 @@ func (d *fragments) Match(input []byte, offset int) (matched int) {
 }
 
 
-type caseSensitiveFragments struct {
-	values [][]byte
+
+//NewFragments returns fragments folds
+func NewFragments(values ...[]byte) *Fragments {
+	return &Fragments{values:values}
 }
 
-func (d *caseSensitiveFragments) Match(input []byte, offset int) (matched int) {
-	for _, candidate := range d.values {
-		if offset+len(candidate) < len(input) {
-			if bytes.Equal(input[offset:offset+len(candidate)], candidate) {
-				return len(candidate)
-			}
-		}
-	}
-	return matched
-}
 
-//NewFragments creates fragment matcher
-func NewFragments(values []string, options ...lex.Option) lex.Matcher {
-	var vals = make([][]byte, 0)
-	for _, value := range values {
-		vals = append(vals, []byte(value))
-	}
-	caseOpt := &option.Case{}
-	if lex.AssignOption(options, &caseOpt) && ! caseOpt.Sensitive {
-		return &fragments{values: vals}
-	}
-	return &caseSensitiveFragments{values: vals}
-}
+

@@ -2,7 +2,7 @@ package matcher
 
 import (
 	"github.com/stretchr/testify/assert"
-	"github.com/viant/parsly/lex"
+	"github.com/viant/parsly"
 	"testing"
 )
 
@@ -10,40 +10,40 @@ func TestNewChar(t *testing.T) {
 
 	useCases := []struct {
 		description string
-		char     rune
-		options     []lex.Option
-		offset int
+		char        rune
+		options     []Option
+		pos         int
 		input       []byte
 		matched     bool
 	}{
 		{
-			description:"match",
-			char:'b',
-			input:[]byte("abc"),
-			offset:1,
-			matched:true,
+			description: "match",
+			char:        'b',
+			input:       []byte("abc"),
+			pos:         1,
+			matched:     true,
 		},
 		{
-			description:"no match",
-			char:'b',
-			offset:0,
-			input:[]byte("abc"),
-			matched:false,
+			description: "no match",
+			char:        'b',
+			pos:         0,
+			input:       []byte("abc"),
+			matched:     false,
 		},
 		{
-			description:"unicode input",
-			char:'b',
-			offset:1,
-			input:[]byte("ab日本語"),
-			matched:true,
+			description: "unicode input",
+			char:        'b',
+			pos:         1,
+			input:       []byte("ab日本語"),
+			matched:     true,
 		},
 
 		{
-			description:"unicode match",
-			char:'日',
-			offset:2,
-			input:[]byte("ab日本語"),
-			matched:true,
+			description: "unicode match",
+			char:        '日',
+			pos:         2,
+			input:       []byte("ab日本語"),
+			matched:     true,
 		},
 
 
@@ -51,7 +51,8 @@ func TestNewChar(t *testing.T) {
 
 	for _, useCase := range useCases {
 		matcher := NewChar(useCase.char)
-		matched := matcher.Match(useCase.input, useCase.offset)
+		cursor := &parsly.Cursor{Input: useCase.input, Pos: useCase.pos}
+		matched := matcher.Match(cursor)
 		assert.Equal(t, useCase.matched, matched > 0, useCase.description)
 	}
 

@@ -2,7 +2,7 @@ package matcher
 
 import (
 	"github.com/stretchr/testify/assert"
-	"github.com/viant/parsly/lex"
+	"github.com/viant/parsly"
 	"github.com/viant/parsly/matcher/option"
 	"testing"
 )
@@ -13,12 +13,12 @@ func TestNewCharset(t *testing.T) {
 	useCases := []struct{
 		description string
 		charset string
-		options []lex.Option
+		options []Option
 		input []byte
 		matched bool
 	} {
 		{
-			description:"utfChar match",
+			description:"Byte match",
 			charset:"abc",
 			input:[]byte("b"),
 			matched:true,
@@ -41,7 +41,7 @@ func TestNewCharset(t *testing.T) {
 			charset:"abc",
 			input:[]byte("B"),
 			matched:true,
-			options:[]lex.Option{
+			options:[]Option{
 				&option.Case{Sensitive:false},
 			},
 		},
@@ -49,7 +49,8 @@ func TestNewCharset(t *testing.T) {
 
 	for _, useCase := range useCases {
 		matcher := NewCharset(useCase.charset, useCase.options...)
-		matched := matcher.Match(useCase.input, 0)
+		cursor := &parsly.Cursor{Input:useCase.input}
+		matched := matcher.Match(cursor)
 		assert.Equal(t, useCase.matched, matched > 0, useCase.description)
 	}
 

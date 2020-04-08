@@ -2,6 +2,7 @@ package matcher
 
 import (
 	"github.com/stretchr/testify/assert"
+	"github.com/viant/parsly"
 	"testing"
 )
 
@@ -15,21 +16,21 @@ func TestNewQuote(t *testing.T) {
 	}{
 
 		{
-			description: "utfQuote with unicode utfChar match",
+			description: "RuneQuote with unicode Byte match",
 			quote:       '\'',
 			escape:      '\\',
 			input:       []byte("'日本語 test' abc"),
 			matched:     16,
 		},
 		{
-			description: "utfQuote with unicode utfChar match",
+			description: "RuneQuote with unicode Byte match",
 			quote:       '\'',
 			escape:      '\\',
 			input:       []byte("'this is test' abc"),
 			matched:     14,
 		},
 		{
-			description: "utfQuote with unicode utfChar match",
+			description: "RuneQuote with unicode Byte match",
 			quote:       '\'',
 			escape:      '\\',
 			input:       []byte("'t \\'is test' abc"),
@@ -39,7 +40,7 @@ func TestNewQuote(t *testing.T) {
 
 	for _, useCase := range useCases {
 		matcher := NewQuote(useCase.quote, useCase.escape)
-		matched := matcher.Match(useCase.input, 0)
+		matched := matcher.Match(&parsly.Cursor{Input:useCase.input})
 		assert.Equal(t, useCase.matched, matched, useCase.description)
 	}
 

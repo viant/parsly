@@ -2,22 +2,21 @@ package matcher
 
 import (
 	"github.com/stretchr/testify/assert"
-	"github.com/viant/parsly/lex"
-	"github.com/viant/parsly/matcher/option"
+	"github.com/viant/parsly"
 	"testing"
 )
 
 func TestNewFragments(t *testing.T) {
 
 	useCases := []struct{
-		description string
-		fragments   string
-		options     []lex.Option
-		input       []byte
-		matched     bool
+		description     string
+		fragments       string
+		caseInsensitive bool
+		input           []byte
+		matched         bool
 	} {
 		{
-			description: "fragments match",
+			description: "FragmentsFold match",
 			fragments:   "abc",
 			input:       []byte("abc test"),
 			matched:     true,
@@ -36,20 +35,28 @@ func TestNewFragments(t *testing.T) {
 		},
 
 		{
-			description: "case match",
-			fragments:   "abc",
-			input:       []byte("ABc test"),
-			matched:     true,
-			options:[]lex.Option{
-				&option.Case{Sensitive:false},
-			},
+			description:     "case match",
+			fragments:       "abc",
+			input:           []byte("ABc test"),
+			matched:         true,
+			caseInsensitive: true,
 		},
 	}
 
 	for _, useCase := range useCases {
-		matcher := NewFragments([]string{useCase.fragments}, useCase.options...)
-		matched := matcher.Match(useCase.input, 0)
+
+
+		if useCase.caseInsensitive {
+			matcher := NewFragmentsFold([]byte(useCase.fragments))
+			matched := matcher.Match(parsly.NewCursor("", useCase.input, 0))
+			assert.Equal(t, useCase.matched, matched > 0, useCase.description)
+			continue
+		}
+
+		matcher := NewFragments([]byte(useCase.fragments))
+		matched := matcher.Match(parsly.NewCursor("", useCase.input, 0))
 		assert.Equal(t, useCase.matched, matched > 0, useCase.description)
+
 	}
 
 

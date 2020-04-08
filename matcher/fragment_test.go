@@ -2,7 +2,7 @@ package matcher
 
 import (
 	"github.com/stretchr/testify/assert"
-	"github.com/viant/parsly/lex"
+	"github.com/viant/parsly"
 	"github.com/viant/parsly/matcher/option"
 	"testing"
 )
@@ -12,12 +12,12 @@ func TestNewFragment(t *testing.T) {
 	useCases := []struct{
 		description string
 		fragments   string
-		options     []lex.Option
+		options     []Option
 		input       []byte
 		matched     bool
 	} {
 		{
-			description: "fragments match",
+			description: "FragmentsFold match",
 			fragments:   "abc",
 			input:       []byte("abc test"),
 			matched:     true,
@@ -40,7 +40,7 @@ func TestNewFragment(t *testing.T) {
 			fragments:   "abc",
 			input:       []byte("ABc test"),
 			matched:     true,
-			options:[]lex.Option{
+			options:[]Option{
 				&option.Case{Sensitive:false},
 			},
 		},
@@ -48,7 +48,7 @@ func TestNewFragment(t *testing.T) {
 
 	for _, useCase := range useCases {
 		matcher := NewFragment(useCase.fragments, useCase.options...)
-		matched := matcher.Match(useCase.input, 0)
+		matched := matcher.Match(parsly.NewCursor("", useCase.input, 0))
 		assert.Equal(t, useCase.matched, matched > 0, useCase.description)
 	}
 

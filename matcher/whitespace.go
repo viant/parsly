@@ -1,14 +1,14 @@
 package matcher
 
-import (
-	"github.com/viant/parsly/lex"
-)
+import "github.com/viant/parsly"
 
-type whitespace struct{}
+type Whitespace struct{}
 
-//Match matches whitespaces
-func (w whitespace) Match(input []byte, offset int) (matched int) {
-	size := len(input)
+//TokenMatch matches whitespaces
+func (w *Whitespace) Match(cursor *parsly.Cursor) (matched int) {
+	offset := cursor.Pos
+	input := cursor.Input
+	size := cursor.InputSize
 loop:
 	{
 		index := offset + matched
@@ -24,8 +24,7 @@ loop:
 	return matched
 }
 
-
-//NewWhiteSpace creates a whitespace matcher
-func NewWhiteSpace() lex.Matcher {
-	return &whitespace{}
+//NewWhiteSpace creates a Whitespace matcher
+func NewWhiteSpace() *Whitespace {
+	return &Whitespace{}
 }

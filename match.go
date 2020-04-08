@@ -1,51 +1,71 @@
 package parsly
 
-
-//Match represents
-type Match struct {
-	Location *Location
-	Cursor   int
-	Size     int
+import (
+	"bytes"
+	"strconv"
+)
+//TokenMatch represents
+type TokenMatch struct {
+	Offset int
+	Size   int
 	*Token
 }
 
-
-
-//AsString converts bytes to string
-var AsString = func(data []byte) string {
-	return string(data)
-}
-
-
 //Matched return matched fragment
-func (m *Match) Bytes(tokenizer *Tokenizer) []byte {
-	return tokenizer.input[m.Cursor : m.Cursor+m.Size]
+func (m *TokenMatch) Bytes(cursor *Cursor) []byte {
+	return cursor.Input[m.Offset : m.Offset+m.Size]
 }
-
-
-
 
 
 //MatchedUnquoted return matched unquoted fragment
-func (m *Match) UnquotedText(tokenizer *Tokenizer) string {
-	data := m.Bytes(tokenizer)
+func (m *TokenMatch) UnquotedText(cursor *Cursor) string {
+	data := m.Bytes(cursor)
 	return AsString(data[1:len(data)-1])
 }
 
 
+//Contains return true if lastMatch data contains rune
+func (m *TokenMatch) ContainsRune(cursor *Cursor, r rune) bool {
+	return bytes.ContainsRune(cursor.Input[m.Offset: m.Offset+m.Size], r)
+}
+
 //Matched return matched fragment
-func (m *Match) Text(tokenizer *Tokenizer) string {
-	data := m.Bytes(tokenizer)
+func (m *TokenMatch) Text(cursor *Cursor) string {
+	data := m.Bytes(cursor)
 	return AsString(data)
 }
 
-
-func (m *Match) SetToken(token *Token, cursor int, size int) {
-	m.Token = token
-	m.Cursor = cursor
-	m.Size = size
+//Byte return matched byte
+func (m *TokenMatch) Byte(cursor *Cursor) byte {
+	data := m.Bytes(cursor)
+	return data[0]
 }
 
-func NewMatch(location *Location) *Match {
-	return &Match{Location:location}
+
+//Float return matched float value
+func (m *TokenMatch) Float(cursor *Cursor) (float64, error) {
+	data := m.Bytes(cursor)
+	value :=  AsZeroAllocString(data)
+	return  strconv.ParseFloat(value, 64)
+}
+
+//Int return matched int value
+func (m *TokenMatch) Int(cursor *Cursor) (int64, error) {
+	data := m.Bytes(cursor)
+	value :=  AsZeroAllocString(data)
+	return strconv.ParseInt(value, 10, 64)
+}
+
+//Bool return matched bool value
+func (m *TokenMatch) Bool(cursor *Cursor) (bool, error) {
+	data := m.Bytes(cursor)
+	value :=  AsZeroAllocString(data)
+	return strconv.ParseBool(value)
+}
+
+
+func (m *TokenMatch) SetToken(token *Token, cursor int, size int) {
+	m.Token = token
+	m.Offset = cursor
+	m.Size = size
 }
