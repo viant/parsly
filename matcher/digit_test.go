@@ -36,10 +36,8 @@ func TestNewDigit(t *testing.T) {
 	}
 	for _, useCase := range useCases {
 		matcher := NewDigit()
-		matched := matcher.Match(&parsly.Cursor{Input:useCase.input, Pos:useCase.offset})
+		matched := matcher.Match(&parsly.Cursor{Input: useCase.input, Pos: useCase.offset})
 		assert.Equal(t, useCase.matched, matched > 0, useCase.description)
 	}
 
 }
-
-

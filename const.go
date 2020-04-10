@@ -12,4 +12,3 @@ var EOFToken = NewToken(EOF, "EOF", nil)
 
 //InvalidToken represents invalid token
 var InvalidToken = NewToken(Invalid, "Invalid", nil)
-

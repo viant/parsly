@@ -1,6 +1,5 @@
 package example
 
-
 type Expression struct {
 	LeftOp   *Operand `json:",omitempty"`
 	Operator string

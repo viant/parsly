@@ -40,7 +40,7 @@ func TestNewQuote(t *testing.T) {
 
 	for _, useCase := range useCases {
 		matcher := NewQuote(useCase.quote, useCase.escape)
-		matched := matcher.Match(&parsly.Cursor{Input:useCase.input})
+		matched := matcher.Match(&parsly.Cursor{Input: useCase.input})
 		assert.Equal(t, useCase.matched, matched, useCase.description)
 	}
 

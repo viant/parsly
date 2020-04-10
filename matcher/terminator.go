@@ -8,7 +8,6 @@ type Terminator struct {
 	value byte
 }
 
-
 func (t *Terminator) Match(cursor *parsly.Cursor) (matched int) {
 	hasMatch := false
 	for _, c := range cursor.Input[cursor.Pos:] {
@@ -17,12 +16,11 @@ func (t *Terminator) Match(cursor *parsly.Cursor) (matched int) {
 			break
 		}
 	}
-	if ! hasMatch {
+	if !hasMatch {
 		return 0
 	}
 	return matched
 }
-
 
 //Terminator creates a terminator byte matcher
 func NewTerminator(value byte) *Terminator {

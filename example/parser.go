@@ -1,10 +1,8 @@
 package example
 
-
 import (
 	"github.com/viant/parsly"
 )
-
 
 func Parse(input []byte) (root *Expression, err error) {
 	cursor := parsly.NewCursor("", input, 0)
@@ -17,7 +15,7 @@ func Parse(input []byte) (root *Expression, err error) {
 	value, _ := matched.Float(cursor)
 	expression.LeftOp = NewValue(value)
 
-	for ; ; {
+	for {
 		matched = cursor.MatchAfterOptional(Whitespace, Factor, Term)
 		if matched.Code == parsly.EOF {
 			break

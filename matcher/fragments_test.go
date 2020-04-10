@@ -8,13 +8,13 @@ import (
 
 func TestNewFragments(t *testing.T) {
 
-	useCases := []struct{
+	useCases := []struct {
 		description     string
 		fragments       string
 		caseInsensitive bool
 		input           []byte
 		matched         bool
-	} {
+	}{
 		{
 			description: "FragmentsFold match",
 			fragments:   "abc",
@@ -45,7 +45,6 @@ func TestNewFragments(t *testing.T) {
 
 	for _, useCase := range useCases {
 
-
 		if useCase.caseInsensitive {
 			matcher := NewFragmentsFold([]byte(useCase.fragments))
 			matched := matcher.Match(parsly.NewCursor("", useCase.input, 0))
@@ -58,7 +57,5 @@ func TestNewFragments(t *testing.T) {
 		assert.Equal(t, useCase.matched, matched > 0, useCase.description)
 
 	}
-
-
 
 }

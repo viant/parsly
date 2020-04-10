@@ -13,7 +13,7 @@ type RuneQuote struct {
 //TokenMatch matches quoted characters
 func (m *RuneQuote) Match(cursor *parsly.Cursor) int {
 	var matched = 0
-	inputSize:=cursor.InputSize
+	inputSize := cursor.InputSize
 	input := cursor.Input
 	pos := cursor.Pos
 	runeValue, width := utf8.DecodeRune(input[pos:])
@@ -21,12 +21,12 @@ func (m *RuneQuote) Match(cursor *parsly.Cursor) int {
 		return 0
 	}
 	matched += width
-	for i := pos  + matched; i < inputSize ; i++ {
+	for i := pos + matched; i < inputSize; i++ {
 		runeValue, width = utf8.DecodeRune(input[pos+matched:])
 		matched += width
 		hasMore := pos+matched < inputSize
 		if runeValue == m.escape {
-			if ! hasMore {
+			if !hasMore {
 				return 0
 			}
 			runeValue, width = utf8.DecodeRune(input[pos+matched:])
@@ -47,8 +47,6 @@ func NewRuneQuote(escape, value rune) *RuneQuote {
 	}
 }
 
-
-
 type ByteQuote struct {
 	escape byte
 	value  byte
@@ -57,7 +55,7 @@ type ByteQuote struct {
 //TokenMatch matches quoted characters
 func (m *ByteQuote) Match(cursor *parsly.Cursor) int {
 	var matched = 0
-	inputSize:=cursor.InputSize
+	inputSize := cursor.InputSize
 	input := cursor.Input
 	pos := cursor.Pos
 	value := input[pos]
@@ -65,12 +63,12 @@ func (m *ByteQuote) Match(cursor *parsly.Cursor) int {
 		return 0
 	}
 	matched++
-	for i := pos + matched; i < inputSize ; i++ {
+	for i := pos + matched; i < inputSize; i++ {
 		value = input[i]
 		matched++
-		hasMore := i + 1 < inputSize
+		hasMore := i+1 < inputSize
 		if value == m.escape {
-			if ! hasMore {
+			if !hasMore {
 				return 0
 			}
 			i++

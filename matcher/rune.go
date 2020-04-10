@@ -17,10 +17,7 @@ func (c *Rune) Match(cursor *parsly.Cursor) (matched int) {
 	return 0
 }
 
-
 //NewRune creates a rune matcher
 func NewRune(value rune) *Rune {
-	return &Rune{value:value}
+	return &Rune{value: value}
 }
-
-

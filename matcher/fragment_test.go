@@ -9,13 +9,13 @@ import (
 
 func TestNewFragment(t *testing.T) {
 
-	useCases := []struct{
+	useCases := []struct {
 		description string
 		fragments   string
 		options     []Option
 		input       []byte
 		matched     bool
-	} {
+	}{
 		{
 			description: "FragmentsFold match",
 			fragments:   "abc",
@@ -40,8 +40,8 @@ func TestNewFragment(t *testing.T) {
 			fragments:   "abc",
 			input:       []byte("ABc test"),
 			matched:     true,
-			options:[]Option{
-				&option.Case{Sensitive:false},
+			options: []Option{
+				&option.Case{Sensitive: false},
 			},
 		},
 	}
@@ -51,7 +51,5 @@ func TestNewFragment(t *testing.T) {
 		matched := matcher.Match(parsly.NewCursor("", useCase.input, 0))
 		assert.Equal(t, useCase.matched, matched > 0, useCase.description)
 	}
-
-
 
 }

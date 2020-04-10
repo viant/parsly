@@ -9,7 +9,7 @@ type Byte struct {
 }
 
 func (c *Byte) Match(cursor *parsly.Cursor) (matched int) {
-	if  cursor.Input[cursor.Pos] == c.value {
+	if cursor.Input[cursor.Pos] == c.value {
 		return 1
 	}
 	return 0
@@ -19,5 +19,3 @@ func (c *Byte) Match(cursor *parsly.Cursor) (matched int) {
 func NewByte(value byte) *Byte {
 	return &Byte{value: value}
 }
-
-

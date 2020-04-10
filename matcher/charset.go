@@ -6,21 +6,20 @@ import (
 	"unicode"
 )
 
-
 //NewCharset creates a bytes or runes matcher
 func NewCharset(set string, options ...Option) parsly.Matcher {
 	valuesMap := make(map[rune]bool)
 
 	caseOpt := &option.Case{}
-	if ! AssignOption(options, &caseOpt) {
+	if !AssignOption(options, &caseOpt) {
 		caseOpt = nil
 	}
 	useRunes := false
 	for _, r := range set {
-		if ! useRunes && !isByte(r) {
+		if !useRunes && !isByte(r) {
 			useRunes = true
 		}
-		if caseOpt != nil && ! caseOpt.Sensitive {
+		if caseOpt != nil && !caseOpt.Sensitive {
 			valuesMap[unicode.ToLower(r)] = true
 			valuesMap[unicode.ToUpper(r)] = true
 			continue

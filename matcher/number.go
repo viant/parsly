@@ -18,12 +18,13 @@ func (n *number) Match(cursor *parsly.Cursor) (matched int) {
 	hasExponent := false
 	valid := false
 	var i int
-	outer: for i = pos; i < size; i++ {
+outer:
+	for i = pos; i < size; i++ {
 		switch input[i] {
 		case '0', '1', '2', '3', '4', '5', '6', '7', '8', '9':
 			valid = true
 		case 'e', 'E':
-			if ! valid || hasExponent {
+			if !valid || hasExponent {
 				return 0
 			}
 			hasExponent = true
@@ -35,7 +36,7 @@ func (n *number) Match(cursor *parsly.Cursor) (matched int) {
 			}
 			valid = false
 		case '.':
-			if ! valid || hasDecPoint {
+			if !valid || hasDecPoint {
 				return 0
 			}
 			valid = false
@@ -45,16 +46,13 @@ func (n *number) Match(cursor *parsly.Cursor) (matched int) {
 		}
 	}
 
-	if ! valid {
+	if !valid {
 		return 0
 	}
-	return i   - cursor.Pos
+	return i - cursor.Pos
 }
-
 
 //NewNumber creates a number matcher
 func NewNumber() *number {
-	return &number{
-
-	}
+	return &number{}
 }

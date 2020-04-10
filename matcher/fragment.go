@@ -12,7 +12,7 @@ type FragmentFold struct {
 }
 
 func (d *FragmentFold) Match(cursor *parsly.Cursor) int {
-	matchEnd := cursor.Pos+d.size
+	matchEnd := cursor.Pos + d.size
 	if matchEnd < cursor.InputSize {
 		if bytes.EqualFold(cursor.Input[cursor.Pos:matchEnd], d.value) {
 			return d.size
@@ -27,7 +27,7 @@ type Fragment struct {
 }
 
 func (d *Fragment) Match(cursor *parsly.Cursor) int {
-	matchEnd := cursor.Pos+d.size
+	matchEnd := cursor.Pos + d.size
 	if matchEnd < cursor.InputSize {
 		if bytes.Equal(cursor.Input[cursor.Pos:matchEnd], d.value) {
 			return d.size
@@ -36,11 +36,10 @@ func (d *Fragment) Match(cursor *parsly.Cursor) int {
 	return 0
 }
 
-
 //NewFragments creates FragmentFold matcher
 func NewFragment(value string, options ...Option) parsly.Matcher {
 	caseOpt := &option.Case{}
-	if AssignOption(options, &caseOpt) && ! caseOpt.Sensitive {
+	if AssignOption(options, &caseOpt) && !caseOpt.Sensitive {
 		return &FragmentFold{
 			value: []byte(value),
 			size:  len(value),

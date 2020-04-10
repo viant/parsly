@@ -45,8 +45,6 @@ func TestNewChar(t *testing.T) {
 			input:       []byte("ab日本語"),
 			matched:     true,
 		},
-
-
 	}
 
 	for _, useCase := range useCases {

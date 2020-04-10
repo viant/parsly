@@ -1,6 +1,5 @@
 package parsly
 
-
 //AsString converts bytes to string
 var AsString = func(data []byte) string {
 	return string(data)
@@ -12,4 +11,3 @@ var AsString = func(data []byte) string {
 var AsZeroAllocString = func(data []byte) string {
 	return string(data)
 }
-

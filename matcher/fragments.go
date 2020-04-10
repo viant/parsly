@@ -14,7 +14,7 @@ func (d *FragmentsFold) Match(cursor *parsly.Cursor) (matched int) {
 	offset := cursor.Pos
 	input := cursor.Input
 	for _, candidate := range d.values {
-		matchEnd := offset+len(candidate)
+		matchEnd := offset + len(candidate)
 		if matchEnd < size {
 			if bytes.EqualFold(input[offset:matchEnd], candidate) {
 				return len(candidate)
@@ -26,12 +26,10 @@ func (d *FragmentsFold) Match(cursor *parsly.Cursor) (matched int) {
 
 //NewFragmentsFold returns fragments folds
 func NewFragmentsFold(values ...[]byte) *FragmentsFold {
-	return &FragmentsFold{values:values}
+	return &FragmentsFold{values: values}
 }
 
-
-
-type Fragments  struct {
+type Fragments struct {
 	values [][]byte
 }
 
@@ -40,7 +38,7 @@ func (d *Fragments) Match(cursor *parsly.Cursor) (matched int) {
 	offset := cursor.Pos
 	input := cursor.Input
 	for _, candidate := range d.values {
-		matchEnd := offset+len(candidate)
+		matchEnd := offset + len(candidate)
 		if matchEnd < size {
 			if bytes.Equal(input[offset:matchEnd], candidate) {
 				return len(candidate)
@@ -50,12 +48,7 @@ func (d *Fragments) Match(cursor *parsly.Cursor) (matched int) {
 	return matched
 }
 
-
-
 //NewFragments returns fragments folds
 func NewFragments(values ...[]byte) *Fragments {
-	return &Fragments{values:values}
+	return &Fragments{values: values}
 }
-
-
-

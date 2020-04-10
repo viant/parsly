@@ -4,7 +4,6 @@ import (
 	"github.com/viant/parsly"
 )
 
-
 //NewChar creates a rune or a byte matcher
 func NewChar(value rune) parsly.Matcher {
 	if isByte(value) {
@@ -12,5 +11,3 @@ func NewChar(value rune) parsly.Matcher {
 	}
 	return NewRune(value)
 }
-
-

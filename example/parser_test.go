@@ -10,17 +10,16 @@ import (
 
 func TestNewParser(t *testing.T) {
 
-
-	useCases := []struct{
+	useCases := []struct {
 		description string
-		input string
-		expect string
-		hasError bool
-	} {
+		input       string
+		expect      string
+		hasError    bool
+	}{
 		{
-			description:"2 operands expression",
-			input:"3 + 8",
-			expect:`{
+			description: "2 operands expression",
+			input:       "3 + 8",
+			expect: `{
 	"LeftOp": {
 		"Value": 3
 	},
@@ -48,10 +47,10 @@ func TestNewParser(t *testing.T) {
 			assert.NotNil(t, err, useCase.description)
 			continue
 		}
-		if ! assert.Nil(t, err, useCase.description) {
+		if !assert.Nil(t, err, useCase.description) {
 			continue
 		}
-		if ! assertly.AssertValues(t, useCase.expect, actual, useCase.description) {
+		if !assertly.AssertValues(t, useCase.expect, actual, useCase.description) {
 			data, _ := json.Marshal(actual)
 			fmt.Printf("%s\n", data)
 		}

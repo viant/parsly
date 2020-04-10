@@ -24,7 +24,6 @@ func (c *Cursor) NewError(expectedTokens ...*Token) error {
 	return errors.Errorf("invalid token, expected: [%v] at  pos: %v", strings.Join(names, ","), c.offset+c.Pos)
 }
 
-
 //TokenMatch returns updated lastMatch
 func (c *Cursor) TokenMatch(token *Token, matchSize int) *TokenMatch {
 	c.lastMatch.Token = token
@@ -33,16 +32,14 @@ func (c *Cursor) TokenMatch(token *Token, matchSize int) *TokenMatch {
 	return &c.lastMatch
 }
 
-
 //HasMore returns true if it has more
 func (c *Cursor) HasMore() bool {
 	return c.Pos < c.InputSize
 }
 
-
 //MatchAfterOptional matcher first candidate after optional token lastMatch
-func (c *Cursor) MatchAfterOptional( optional *Token, candidates ...*Token) *TokenMatch {
-	if ! c.HasMore() {
+func (c *Cursor) MatchAfterOptional(optional *Token, candidates ...*Token) *TokenMatch {
+	if !c.HasMore() {
 		return c.TokenMatch(EOFToken, 0)
 	}
 	matched := optional.Match(c)
@@ -50,10 +47,9 @@ func (c *Cursor) MatchAfterOptional( optional *Token, candidates ...*Token) *Tok
 	return c.MatchAny(candidates...)
 }
 
-
 //MatchAny matches the first of the candidates
-func (c *Cursor)  MatchAny(candidates ...*Token) *TokenMatch {
-	if ! c.HasMore() {
+func (c *Cursor) MatchAny(candidates ...*Token) *TokenMatch {
+	if !c.HasMore() {
 		return c.TokenMatch(EOFToken, 0)
 	}
 	size := candidates
@@ -73,10 +69,9 @@ loop:
 	return c.TokenMatch(InvalidToken, 0)
 }
 
-
 //MatchOne tries to lastMatch a candidate, it returns a lastMatch.
 func (c *Cursor) MatchOne(token *Token) *TokenMatch {
-	if ! c.HasMore() {
+	if !c.HasMore() {
 		return c.TokenMatch(EOFToken, 0)
 	}
 	matchedSize := token.Match(c)
@@ -88,8 +83,7 @@ func (c *Cursor) MatchOne(token *Token) *TokenMatch {
 	return c.TokenMatch(InvalidToken, 0)
 }
 
-
 //NewCursor creates a location
 func NewCursor(path string, input []byte, offset int) *Cursor {
-	return &Cursor{Path: path, Input: input,  offset:offset, InputSize: len(input)}
+	return &Cursor{Path: path, Input: input, offset: offset, InputSize: len(input)}
 }
