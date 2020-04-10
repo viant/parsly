@@ -1,6 +1,15 @@
 # Parsly -  parsing utility.
 
 
+[![GoReportCard](https://goreportcard.com/badge/github.com/viant/parsly)](https://goreportcard.com/report/github.com/viant/parsly)
+[![GoDoc](https://godoc.org/github.com/viant/parsly?status.svg)](https://godoc.org/github.com/viant/parsly)
+
+This library is compatible with Go 1.11+
+
+Please refer to [`CHANGELOG.md`](CHANGELOG.md) if you encounter breaking changes.
+
+
+
 The goal of this project is to simplify implementing parsers with 
 a tokenizer with a set of commonly use token matchers.
 
@@ -68,6 +77,16 @@ See [example](example) basic arithmetic AST expression parser
    - [fragment](matcher/fragment.go) to match a fragment
    - [fragments](matcher/fragments.go) to match a set of fragments
    - [number](matcher/number.go) to match a number
-   - [numberSign](matcher/numbersign.go) to match a number sign (+/-)
    - [quote](matcher/quote.go) to match a quoted fragment  
-   - [whitespace](matcher/whitespace.go) to match a whitespaces
+   - [terminator](matcher/terminator.go) to match a byte terminated sequence
+   
+   
+<a name="License"></a>
+## License
+
+The source code is made available under the terms of the Apache License, Version 2, as stated in the file `LICENSE`.
+
+Individual files may be made available under their own specific license,
+all compatible with Apache License, Version 2. Please see individual files for details.
+
+

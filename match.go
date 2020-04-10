@@ -4,7 +4,9 @@ import (
 	"bytes"
 	"strconv"
 )
-//TokenMatch represents
+
+
+//TokenMatch represents a token match
 type TokenMatch struct {
 	Offset int
 	Size   int
@@ -63,7 +65,7 @@ func (m *TokenMatch) Bool(cursor *Cursor) (bool, error) {
 	return strconv.ParseBool(value)
 }
 
-
+//SetToken sets token
 func (m *TokenMatch) SetToken(token *Token, cursor int, size int) {
 	m.Token = token
 	m.Offset = cursor
