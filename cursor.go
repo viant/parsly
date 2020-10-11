@@ -1,7 +1,7 @@
 package parsly
 
 import (
-	"github.com/pkg/errors"
+	"fmt"
 	"strings"
 )
 
@@ -21,7 +21,7 @@ func (c *Cursor) NewError(expectedTokens ...*Token) error {
 	for _, token := range expectedTokens {
 		names = append(names, token.Name)
 	}
-	return errors.Errorf("invalid token, expected: [%v] at  pos: %v", strings.Join(names, ","), c.offset+c.Pos)
+	return fmt.Errorf("invalid token, expected: [%v] at  pos: %v", strings.Join(names, ","), c.offset+c.Pos)
 }
 
 //TokenMatch returns updated lastMatch
