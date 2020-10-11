@@ -83,6 +83,27 @@ func (c *Cursor) MatchOne(token *Token) *TokenMatch {
 	return c.TokenMatch(InvalidToken, 0)
 }
 
+
+//FindMatch tries to find a token match in the cursor
+func (c *Cursor) FindMatch(token *Token) *TokenMatch {
+	pos := c.Pos
+	for ; ; {
+		if !c.HasMore() {
+			break
+		}
+		matchedSize := token.Match(c)
+		if matchedSize > 0 {
+			result := c.TokenMatch(token, matchedSize)
+			c.Pos += matchedSize
+			return result
+		}
+		c.Pos++
+	}
+	//
+	c.Pos = pos
+	return c.TokenMatch(InvalidToken, 0)
+}
+
 //NewCursor creates a location
 func NewCursor(path string, input []byte, offset int) *Cursor {
 	return &Cursor{Path: path, Input: input, offset: offset, InputSize: len(input)}
