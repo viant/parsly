@@ -17,7 +17,7 @@ type Cursor struct {
 
 //NewError returns error for expected tokens
 func (c *Cursor) NewError(expectedTokens ...*Token) error {
-	var names = []string{}
+	var names = make([]string, 0)
 	for _, token := range expectedTokens {
 		names = append(names, token.Name)
 	}
@@ -83,11 +83,10 @@ func (c *Cursor) MatchOne(token *Token) *TokenMatch {
 	return c.TokenMatch(InvalidToken, 0)
 }
 
-
 //FindMatch tries to find a token match in the cursor
 func (c *Cursor) FindMatch(token *Token) *TokenMatch {
 	pos := c.Pos
-	for ; ; {
+	for {
 		if !c.HasMore() {
 			break
 		}
