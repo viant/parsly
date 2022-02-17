@@ -39,7 +39,7 @@ func (d *Fragments) Match(cursor *parsly.Cursor) (matched int) {
 	input := cursor.Input
 	for _, candidate := range d.values {
 		matchEnd := offset + len(candidate)
-		if matchEnd < size {
+		if matchEnd <= size {
 			if bytes.Equal(input[offset:matchEnd], candidate) {
 				return len(candidate)
 			}
