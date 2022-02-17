@@ -15,7 +15,7 @@ func (d *FragmentsFold) Match(cursor *parsly.Cursor) (matched int) {
 	input := cursor.Input
 	for _, candidate := range d.values {
 		matchEnd := offset + len(candidate)
-		if matchEnd < size {
+		if matchEnd <= size {
 			if bytes.EqualFold(input[offset:matchEnd], candidate) {
 				return len(candidate)
 			}
