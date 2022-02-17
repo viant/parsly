@@ -5,3 +5,7 @@ local_test.go
 scratchpad
 scratchpad/
 *.prof
+
+*.iml
+go.mod
+go.sum

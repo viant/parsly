@@ -14,6 +14,7 @@ func TestNewFragments(t *testing.T) {
 		caseInsensitive bool
 		input           []byte
 		matched         bool
+		cursorPos       int
 	}{
 		{
 			description: "FragmentsFold match",
@@ -41,21 +42,37 @@ func TestNewFragments(t *testing.T) {
 			matched:         true,
 			caseInsensitive: true,
 		},
+		{
+			description:     "with cursor position",
+			fragments:       "true",
+			input:           []byte(" true"),
+			matched:         true,
+			caseInsensitive: true,
+			cursorPos:       1,
+		},
+		{
+			description:     "case insensitive, fragment same size",
+			fragments:       "abc",
+			input:           []byte("abc"),
+			matched:         true,
+			caseInsensitive: true,
+		},
 	}
 
 	for _, useCase := range useCases {
+		cursor := parsly.NewCursor("", useCase.input, 0)
+		cursor.Pos = useCase.cursorPos
 
 		if useCase.caseInsensitive {
 			matcher := NewFragmentsFold([]byte(useCase.fragments))
-			matched := matcher.Match(parsly.NewCursor("", useCase.input, 0))
+			matched := matcher.Match(cursor)
 			assert.Equal(t, useCase.matched, matched > 0, useCase.description)
 			continue
 		}
 
 		matcher := NewFragments([]byte(useCase.fragments))
-		matched := matcher.Match(parsly.NewCursor("", useCase.input, 0))
+		matched := matcher.Match(cursor)
 		assert.Equal(t, useCase.matched, matched > 0, useCase.description)
-
 	}
 
 }
