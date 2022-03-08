@@ -28,7 +28,7 @@ type Fragment struct {
 
 func (d *Fragment) Match(cursor *parsly.Cursor) int {
 	matchEnd := cursor.Pos + d.size
-	if matchEnd < cursor.InputSize {
+	if matchEnd <= cursor.InputSize {
 		if bytes.Equal(cursor.Input[cursor.Pos:matchEnd], d.value) {
 			return d.size
 		}

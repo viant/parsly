@@ -44,6 +44,12 @@ func TestNewFragment(t *testing.T) {
 				&option.Case{Sensitive: false},
 			},
 		},
+		{
+			description: "input same length as match fragment",
+			fragments:   "abc",
+			input:       []byte("abc"),
+			matched:     true,
+		},
 	}
 
 	for _, useCase := range useCases {
