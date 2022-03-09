@@ -20,6 +20,7 @@ func (m *Block) Match(cursor *parsly.Cursor) int {
 	}
 	depth := 1
 	matched++
+
 	var inQuote byte
 	for i := pos + matched; i < inputSize; i++ {
 		value = input[i]
@@ -39,6 +40,10 @@ func (m *Block) Match(cursor *parsly.Cursor) int {
 			}
 
 		case m.begin:
+			if m.begin == m.end {
+				return matched
+			}
+
 			if isInQuote {
 				continue
 			}

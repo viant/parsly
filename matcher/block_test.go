@@ -35,6 +35,14 @@ func TestNewBlock(t *testing.T) {
 			pos:         1,
 			matched:     14,
 		},
+		{
+			description: "begin and end the same",
+			begin:       ';',
+			end:         ';',
+			escape:      '\\',
+			input:       []byte(`;123;`),
+			matched:     5,
+		},
 	}
 
 	for _, useCase := range useCases {
