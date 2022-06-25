@@ -9,7 +9,7 @@ import (
 func TestNewSpacedFragment(t *testing.T) {
 	useCases := []struct {
 		description string
-		fragments   [][]byte
+		fragments   string
 		options     []Option
 		input       []byte
 		matched     bool
@@ -17,29 +17,20 @@ func TestNewSpacedFragment(t *testing.T) {
 		{
 			description: "FragmentsFold match end",
 			input:       []byte("order\tby"),
-			fragments: [][]byte{
-				[]byte("order"),
-				[]byte("by"),
-			},
-			matched: true,
+			fragments:   "order by",
+			matched:     true,
 		},
 		{
 			description: "FragmentsFold match",
 			input:       []byte("order\tby s"),
-			fragments: [][]byte{
-				[]byte("order"),
-				[]byte("by"),
-			},
-			matched: true,
+			fragments:   "order by",
+			matched:     true,
 		},
 		{
 			description: "FragmentsFold no match",
 			input:       []byte("order\tbz s"),
-			fragments: [][]byte{
-				[]byte("order"),
-				[]byte("by"),
-			},
-			matched: true,
+			fragments:   "order by",
+			matched:     true,
 		},
 	}
 

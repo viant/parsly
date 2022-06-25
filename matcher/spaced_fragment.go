@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"github.com/viant/parsly"
 	"github.com/viant/parsly/matcher/option"
+	"strings"
 )
 
 type SpaceFragmentFold struct {
@@ -78,20 +79,23 @@ outer:
 }
 
 //NewSpaceFragments creates SpaceFragmentFold matcher
-func NewSpaceFragment(value [][]byte, options ...Option) parsly.Matcher {
+func NewSpaceFragment(text string, options ...Option) parsly.Matcher {
 	caseOpt := &option.Case{}
-	size := len(value) - 1
-	for _, v := range value {
+	values := strings.Split(text, " ")
+	size := len(values) - 1
+	var fragments = make([][]byte, 0)
+	for i, v := range values {
 		size += len(v)
+		fragments = append(fragments, []byte(values[i]))
 	}
 	if AssignOption(options, &caseOpt) && !caseOpt.Sensitive {
 		return &SpaceFragmentFold{
-			values: value,
+			values: fragments,
 			size:   size,
 		}
 	}
 	return &SpacedFragment{
-		values: value,
+		values: fragments,
 		size:   size,
 	}
 }

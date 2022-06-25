@@ -13,7 +13,7 @@ type SetFold struct {
 func (d *SetFold) Match(cursor *parsly.Cursor) int {
 	for _, value := range d.value {
 		matchEnd := cursor.Pos + len(value)
-		if matchEnd < cursor.InputSize {
+		if matchEnd <= cursor.InputSize {
 			if MatchFold(value, cursor.Input, 0, cursor.Pos) {
 				return len(value)
 			}
@@ -30,7 +30,7 @@ type Set struct {
 func (d *Set) Match(cursor *parsly.Cursor) int {
 	for _, value := range d.value {
 		matchEnd := cursor.Pos + len(value)
-		if matchEnd < cursor.InputSize {
+		if matchEnd <= cursor.InputSize {
 			if bytes.Equal(value, cursor.Input[cursor.Pos:matchEnd]) {
 				return len(value)
 			}
@@ -39,9 +39,13 @@ func (d *Set) Match(cursor *parsly.Cursor) int {
 	return 0
 }
 
-//NewSets creates SetFold matcher
-func NewSet(value [][]byte, options ...Option) parsly.Matcher {
+//NewSet creates SetFold matcher
+func NewSet(set []string, options ...Option) parsly.Matcher {
 	caseOpt := &option.Case{}
+	value := make([][]byte, 0)
+	for i := range set {
+		value = append(value, []byte(set[i]))
+	}
 	if AssignOption(options, &caseOpt) && !caseOpt.Sensitive {
 		return &SetFold{
 			value: value,
