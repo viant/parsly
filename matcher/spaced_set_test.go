@@ -32,6 +32,16 @@ func TestNewSpacedSet(t *testing.T) {
 			},
 			matched: false,
 		},
+		{
+			description: "other match",
+			input:       []byte("other"),
+			fragments: []string{
+				"seq1 seq2",
+				"seq1 seq3",
+				"other",
+			},
+			matched: true,
+		},
 	}
 
 	for _, useCase := range useCases {
