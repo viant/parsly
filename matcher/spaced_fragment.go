@@ -79,7 +79,7 @@ outer:
 }
 
 //NewSpaceFragments creates SpaceFragmentFold matcher
-func NewSpaceFragment(text string, options ...Option) parsly.Matcher {
+func NewSpacedFragment(text string, options ...Option) parsly.Matcher {
 	caseOpt := &option.Case{}
 	values := strings.Split(text, " ")
 	size := len(values) - 1

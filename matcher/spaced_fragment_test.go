@@ -35,7 +35,7 @@ func TestNewSpacedFragment(t *testing.T) {
 	}
 
 	for _, useCase := range useCases {
-		matcher := NewSpaceFragment(useCase.fragments, useCase.options...)
+		matcher := NewSpacedFragment(useCase.fragments, useCase.options...)
 		matched := matcher.Match(parsly.NewCursor("", useCase.input, 0))
 		assert.Equal(t, useCase.matched, matched > 0, useCase.description)
 	}
