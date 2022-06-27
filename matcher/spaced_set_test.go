@@ -13,7 +13,20 @@ func TestNewSpacedSet(t *testing.T) {
 		options     []Option
 		input       []byte
 		matched     bool
+		offset      int
 	}{
+
+		{
+			description: "seq1 seq3 match",
+			input:       []byte("seq1 seq3"),
+			fragments: []string{
+				"seq1 seq2",
+				"seq1 seq3",
+				"seq1",
+			},
+			matched: true,
+		},
+
 		{
 			description: "seq1 seq3 match",
 			input:       []byte("seq1 seq3"),
@@ -42,11 +55,22 @@ func TestNewSpacedSet(t *testing.T) {
 			},
 			matched: true,
 		},
+
+		{
+			description: "seq1 match",
+			input:       []byte("seq1 ddddddddddd"),
+			fragments: []string{
+				"seq1 seq2",
+				"seq1 seq3",
+				"seq1",
+			},
+			matched: true,
+		},
 	}
 
 	for _, useCase := range useCases {
-		matcher := NewSet(useCase.fragments, useCase.options...)
-		matched := matcher.Match(parsly.NewCursor("", useCase.input, 0))
+		matcher := NewSpacedSet(useCase.fragments, useCase.options...)
+		matched := matcher.Match(parsly.NewCursor("", useCase.input, useCase.offset))
 		assert.Equal(t, useCase.matched, matched > 0, useCase.description)
 	}
 
