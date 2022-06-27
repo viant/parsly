@@ -17,45 +17,45 @@ func TestNewSpacedSet(t *testing.T) {
 		pos         int
 	}{
 
-		//{
-		//	description: "seq1 seq3 match",
-		//	input:       []byte("seq1 seq3"),
-		//	fragments: []string{
-		//		"seq1 seq2",
-		//		"seq1 seq3",
-		//		"seq1",
-		//	},
-		//	matched: true,
-		//},
-		//
-		//{
-		//	description: "seq1 seq3 match",
-		//	input:       []byte("seq1 seq3"),
-		//	fragments: []string{
-		//		"seq1 seq2",
-		//		"seq1 seq3",
-		//	},
-		//	matched: true,
-		//},
-		//{
-		//	description: "seq1 seq4 not match",
-		//	input:       []byte("seq1 seq4"),
-		//	fragments: []string{
-		//		"seq1 seq2",
-		//		"seq1 seq3",
-		//	},
-		//	matched: false,
-		//},
-		//{
-		//	description: "other match",
-		//	input:       []byte("other"),
-		//	fragments: []string{
-		//		"seq1 seq2",
-		//		"seq1 seq3",
-		//		"other",
-		//	},
-		//	matched: true,
-		//},
+		{
+			description: "seq1 seq3 match",
+			input:       []byte("seq1 seq3 xx"),
+			fragments: []string{
+				"seq1 seq2",
+				"seq1 seq3",
+				"seq1",
+			},
+			matched: true,
+		},
+
+		{
+			description: "seq1 seq3 match",
+			input:       []byte("seq1 seq3 xx"),
+			fragments: []string{
+				"seq1 seq2",
+				"seq1 seq3",
+			},
+			matched: true,
+		},
+		{
+			description: "seq1 seq4 not match",
+			input:       []byte("seq1 seq4 xx"),
+			fragments: []string{
+				"seq1 seq2",
+				"seq1 seq3",
+			},
+			matched: false,
+		},
+		{
+			description: "other match",
+			input:       []byte("other"),
+			fragments: []string{
+				"seq1 seq2",
+				"seq1 seq3",
+				"other",
+			},
+			matched: true,
+		},
 		{
 			description: "seq1 match",
 			input:       []byte("x seq1 ddddddddddd"),

@@ -14,29 +14,31 @@ type SpaceSetFold struct {
 func (d *SpaceSetFold) Match(cursor *parsly.Cursor) int {
 	pos := cursor.Pos
 	inputLen := len(cursor.Input)
+	matched := 0
 next:
 	for _, items := range d.set {
 		pos = cursor.Pos
-
+		matched = 0
 		for i, value := range items {
-
 			if !MatchFold(value, cursor.Input, 0, pos) {
 				continue next
 			}
 			pos += len(value)
+			matched += len(value)
 			isLast := i == len(items)-1
 			if isLast {
-				return pos
+				return matched
 			}
 			for j := pos; j < inputLen-1; j++ {
 				if !IsWhiteSpace(cursor.Input[pos]) {
 					if j > 0 {
-
 						break
 					}
 					pos = 0
+					matched = 0
 					break next
 				}
+				matched++
 				pos++
 			}
 		}
@@ -52,18 +54,20 @@ type SpacedSet struct {
 func (d *SpacedSet) Match(cursor *parsly.Cursor) int {
 	pos := cursor.Pos
 	inputLen := len(cursor.Input)
+	matched := 0
 next:
 	for _, items := range d.set {
 		pos = cursor.Pos
-
+		matched = 0
 		for i, value := range items {
 			if !bytes.Equal(value, cursor.Input[pos:pos+len(value)]) {
 				continue next
 			}
 			pos += len(value)
+			matched += len(value)
 			isLast := i == len(items)-1
 			if isLast {
-				return pos
+				return matched
 			}
 			for j := pos; j < inputLen-1; j++ {
 				if !IsWhiteSpace(cursor.Input[pos]) {
@@ -72,8 +76,10 @@ next:
 						break
 					}
 					pos = 0
+					matched = 0
 					break next
 				}
+				matched++
 				pos++
 			}
 		}
