@@ -17,9 +17,11 @@ func (d *SpaceSetFold) Match(cursor *parsly.Cursor) int {
 next:
 	for _, items := range d.set {
 		pos = cursor.Pos
+
 		for i, value := range items {
+
 			if !MatchFold(value, cursor.Input, 0, pos) {
-				return 0
+				continue next
 			}
 			pos += len(value)
 			isLast := i == len(items)-1
@@ -29,6 +31,7 @@ next:
 			for j := pos; j < inputLen-1; j++ {
 				if !IsWhiteSpace(cursor.Input[pos]) {
 					if j > 0 {
+
 						break
 					}
 					pos = 0
@@ -38,7 +41,7 @@ next:
 			}
 		}
 	}
-	return pos
+	return 0
 }
 
 //SpacedSet represent space fragment
@@ -46,14 +49,13 @@ type SpacedSet struct {
 	set [][][]byte
 }
 
-//if !bytes.Equal(value, cursor.Input[pos:pos+len(value)]) {
-
 func (d *SpacedSet) Match(cursor *parsly.Cursor) int {
 	pos := cursor.Pos
 	inputLen := len(cursor.Input)
 next:
 	for _, items := range d.set {
 		pos = cursor.Pos
+
 		for i, value := range items {
 			if !bytes.Equal(value, cursor.Input[pos:pos+len(value)]) {
 				continue next
@@ -63,10 +65,10 @@ next:
 			if isLast {
 				return pos
 			}
-
 			for j := pos; j < inputLen-1; j++ {
 				if !IsWhiteSpace(cursor.Input[pos]) {
 					if j > 0 {
+
 						break
 					}
 					pos = 0
