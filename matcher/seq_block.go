@@ -37,17 +37,6 @@ func (m *SeqBlock) Match(cursor *parsly.Cursor) int {
 				inQuote = 0
 			}
 
-		case m.begin[0]:
-			if !MatchFold(m.begin, input, 0, pos) {
-				continue
-			}
-			i += beginSize - 1
-			matched += beginSize - 1
-			if isInQuote {
-				continue
-			}
-			depth++
-
 		case m.end[0]:
 			if !MatchFold(m.begin, input, 0, pos) {
 				continue
@@ -61,7 +50,24 @@ func (m *SeqBlock) Match(cursor *parsly.Cursor) int {
 			if depth == 0 {
 				return matched
 			}
+
+			if m.end[0] != m.begin[0] {
+				continue
+			}
+			fallthrough
+		case m.begin[0]:
+			if !MatchFold(m.begin, input, 0, pos) {
+				continue
+			}
+			i += beginSize - 1
+			matched += beginSize - 1
+			if isInQuote {
+				continue
+			}
+			depth++
+
 		}
+
 	}
 	return 0
 }

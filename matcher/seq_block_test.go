@@ -16,8 +16,17 @@ func TestNewSeqBlock(t *testing.T) {
 		input       []byte
 		matched     int
 	}{
+
 		{
-			description: "match",
+			description: "match expr block",
+			begin:       "#if",
+			end:         "#end",
+			input:       []byte("x#if ($Has.X) $X #endvc"),
+			pos:         1,
+			matched:     20,
+		},
+		{
+			description: "match block",
 			begin:       "BEGIN",
 			end:         "END",
 			input:       []byte("xBEGIN test ENDvc"),
