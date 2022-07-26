@@ -38,7 +38,7 @@ func (m *SeqBlock) Match(cursor *parsly.Cursor) int {
 			}
 
 		case m.end[0]:
-			if !MatchFold(m.begin, input, 0, pos) {
+			if !MatchFold(m.end, input, 0, i) {
 				continue
 			}
 			i += endSize - 1
@@ -56,7 +56,7 @@ func (m *SeqBlock) Match(cursor *parsly.Cursor) int {
 			}
 			fallthrough
 		case m.begin[0]:
-			if !MatchFold(m.begin, input, 0, pos) {
+			if !MatchFold(m.begin, input, 0, i) {
 				continue
 			}
 			i += beginSize - 1

@@ -33,8 +33,16 @@ func TestNewSeqBlock(t *testing.T) {
 			pos:         1,
 			matched:     14,
 		},
+		{
+			description: "sql comment",
+			begin:       "/*",
+			end:         "*/",
+			input:       []byte(`/*{"Selector": {"Constraints": {"Projection": true, "Filterable": ["*"]}}}*/`),
+			matched:     76,
+		},
 	}
 
+	//for _, useCase := range useCases[len(useCases)-1:] {
 	for _, useCase := range useCases {
 		matcher := NewSeqBlock(useCase.begin, useCase.end)
 		cursor := &parsly.Cursor{Input: useCase.input, Pos: useCase.pos}
