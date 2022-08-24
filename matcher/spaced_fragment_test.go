@@ -16,7 +16,7 @@ func TestNewSpacedFragment(t *testing.T) {
 	}{
 		{
 			description: "FragmentsFold match end",
-			input:       []byte("order\tby"),
+			input:       []byte("order \nby rer"),
 			fragments:   "order by",
 			matched:     true,
 		},
