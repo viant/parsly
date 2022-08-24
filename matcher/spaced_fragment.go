@@ -28,7 +28,7 @@ outer:
 		pos += len(value)
 		if i != len(d.values)-1 {
 			for j := pos; j < inputLen-1; j++ {
-				if !IsWhiteSpace(cursor.Input[pos]) {
+				if !IsWhiteSpace(cursor.Input[j]) {
 					if j > 0 {
 						break outer
 					}
@@ -68,7 +68,7 @@ outer:
 		}
 
 		for j := pos; j < inputLen-1; j++ {
-			if !IsWhiteSpace(cursor.Input[pos]) {
+			if !IsWhiteSpace(cursor.Input[j]) {
 				if j > 0 {
 					break outer
 				}
