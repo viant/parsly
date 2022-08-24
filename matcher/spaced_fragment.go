@@ -14,7 +14,7 @@ type SpaceFragmentFold struct {
 
 func (d *SpaceFragmentFold) Match(cursor *parsly.Cursor) int {
 	matchEnd := cursor.Pos + d.size
-	originalPos := 0
+	originalPos := cursor.Pos
 	pos := cursor.Pos
 	inputLen := len(cursor.Input)
 	if matchEnd > inputLen {
@@ -50,7 +50,7 @@ type SpacedFragment struct {
 func (d *SpacedFragment) Match(cursor *parsly.Cursor) int {
 	matchEnd := cursor.Pos + d.size
 	pos := cursor.Pos
-	originalPos := 0
+	originalPos := cursor.Pos
 
 	inputLen := len(cursor.Input)
 	if matchEnd > inputLen {
