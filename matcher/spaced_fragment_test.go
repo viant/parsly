@@ -12,14 +12,23 @@ func TestNewSpacedFragment(t *testing.T) {
 		fragments   string
 		options     []Option
 		input       []byte
+		offset      int
 		matched     bool
 	}{
 		{
 			description: "FragmentsFold match end",
-			input:       []byte("order \nby rer"),
+			input:       []byte(" order \nby rer"),
+			fragments:   " order by",
+			offset:      1,
+			matched:     true,
+		},
+		{
+			description: "FragmentsFold match end",
+			input:       []byte("order \tby rer"),
 			fragments:   "order by",
 			matched:     true,
 		},
+
 		{
 			description: "FragmentsFold match",
 			input:       []byte("order\tby s"),
@@ -30,13 +39,13 @@ func TestNewSpacedFragment(t *testing.T) {
 			description: "FragmentsFold no match",
 			input:       []byte("order\tbz s"),
 			fragments:   "order by",
-			matched:     true,
+			matched:     false,
 		},
 	}
 
 	for _, useCase := range useCases {
 		matcher := NewSpacedFragment(useCase.fragments, useCase.options...)
-		matched := matcher.Match(parsly.NewCursor("", useCase.input, 0))
+		matched := matcher.Match(parsly.NewCursor("", useCase.input, useCase.offset))
 		assert.Equal(t, useCase.matched, matched > 0, useCase.description)
 	}
 

@@ -20,7 +20,7 @@ func (d *SpaceFragmentFold) Match(cursor *parsly.Cursor) int {
 	if matchEnd > inputLen {
 		return 0
 	}
-outer:
+
 	for i, value := range d.values {
 		if !MatchFold(value, cursor.Input, 0, pos) {
 			return 0
@@ -30,7 +30,7 @@ outer:
 			for j := pos; j < inputLen-1; j++ {
 				if !IsWhiteSpace(cursor.Input[j]) {
 					if j > 0 {
-						break outer
+						break
 					}
 					return 0
 				}
@@ -56,7 +56,7 @@ func (d *SpacedFragment) Match(cursor *parsly.Cursor) int {
 	if matchEnd > inputLen {
 		return 0
 	}
-outer:
+
 	for i, value := range d.values {
 		if !bytes.Equal(value, cursor.Input[pos:pos+len(value)]) {
 			return 0
@@ -70,7 +70,7 @@ outer:
 		for j := pos; j < inputLen-1; j++ {
 			if !IsWhiteSpace(cursor.Input[j]) {
 				if j > 0 {
-					break outer
+					break
 				}
 				return 0
 			}
