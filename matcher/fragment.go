@@ -14,7 +14,7 @@ type FragmentFold struct {
 
 func (d *FragmentFold) Match(cursor *parsly.Cursor) int {
 	matchEnd := cursor.Pos + d.size
-	if matchEnd < cursor.InputSize {
+	if matchEnd <= cursor.InputSize {
 		if MatchFold(d.value, cursor.Input, 0, cursor.Pos) {
 			return d.size
 		}

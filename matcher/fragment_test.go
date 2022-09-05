@@ -69,6 +69,12 @@ func TestNewFragment(t *testing.T) {
 		matched     bool
 	}{
 		{
+			description: "FragmentsFold exact match",
+			fragments:   "xyz",
+			input:       []byte("xyz"),
+			matched:     true,
+		},
+		{
 			description: "FragmentsFold match",
 			fragments:   "abc",
 			input:       []byte("abc test"),
