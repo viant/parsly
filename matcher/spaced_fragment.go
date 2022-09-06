@@ -63,7 +63,7 @@ func (d *SpacedFragment) Match(cursor *parsly.Cursor) int {
 		}
 		pos += len(value)
 
-		if i == len(d.values)-1 {
+		if i == len(d.values)-1 { //last seq matched
 			break
 		}
 

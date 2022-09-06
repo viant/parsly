@@ -3,6 +3,7 @@ package matcher
 import (
 	"github.com/stretchr/testify/assert"
 	"github.com/viant/parsly"
+	"github.com/viant/parsly/matcher/option"
 	"testing"
 )
 
@@ -13,40 +14,63 @@ func TestNewSpacedFragment(t *testing.T) {
 		options     []Option
 		input       []byte
 		offset      int
-		matched     bool
+		expect      int
 	}{
+
 		{
-			description: "FragmentsFold match end",
+			description: "match case 1",
 			input:       []byte(" order \nby rer"),
 			fragments:   " order by",
 			offset:      1,
-			matched:     true,
+			expect:      10,
 		},
 		{
-			description: "FragmentsFold match end",
+			description: "match case 2",
 			input:       []byte("order \tby rer"),
 			fragments:   "order by",
-			matched:     true,
+			expect:      9,
 		},
-
 		{
-			description: "FragmentsFold match",
+			description: "match case 3",
 			input:       []byte("order\tby s"),
 			fragments:   "order by",
-			matched:     true,
+			expect:      8,
 		},
 		{
-			description: "FragmentsFold no match",
+			description: "no match case 1",
 			input:       []byte("order\tbz s"),
 			fragments:   "order by",
-			matched:     false,
+			expect:      0,
+		},
+		{
+			description: "no match case 2",
+			input:       []byte(" datainto zxx"),
+			offset:      1,
+			fragments:   "data into",
+			options:     []Option{&option.Case{Sensitive: false}},
+			expect:      0,
+		},
+		{
+			description: "no match case 3",
+			input:       []byte(" datainto zxx"),
+			offset:      1,
+			fragments:   "data into",
+			options:     []Option{&option.Case{Sensitive: true}},
+			expect:      0,
+		},
+		{
+			description: "no match case 4",
+			input:       []byte("order\tbz s"),
+			options:     []Option{&option.Case{Sensitive: true}},
+			fragments:   "order by",
+			expect:      0,
 		},
 	}
 
 	for _, useCase := range useCases {
 		matcher := NewSpacedFragment(useCase.fragments, useCase.options...)
 		matched := matcher.Match(parsly.NewCursor("", useCase.input, useCase.offset))
-		assert.Equal(t, useCase.matched, matched > 0, useCase.description)
+		assert.Equal(t, useCase.expect, matched, useCase.description)
 	}
 
 }
