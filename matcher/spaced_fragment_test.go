@@ -19,11 +19,21 @@ func TestNewSpacedFragment(t *testing.T) {
 
 		{
 			description: "match case 1",
-			input:       []byte(" order \nby rer"),
+			input:       []byte("  order \nby rer"),
 			fragments:   " order by",
 			offset:      1,
 			expect:      10,
 		},
+
+		{
+			description: "no match case 3",
+			input:       []byte(" datainto zxx"),
+			offset:      1,
+			fragments:   "data into",
+			options:     []Option{&option.Case{Sensitive: false}},
+			expect:      0,
+		},
+
 		{
 			description: "match case 2",
 			input:       []byte("order \tby rer"),
@@ -69,7 +79,9 @@ func TestNewSpacedFragment(t *testing.T) {
 
 	for _, useCase := range useCases {
 		matcher := NewSpacedFragment(useCase.fragments, useCase.options...)
-		matched := matcher.Match(parsly.NewCursor("", useCase.input, useCase.offset))
+		cursor := parsly.NewCursor("", useCase.input, useCase.offset)
+		cursor.Pos = useCase.offset
+		matched := matcher.Match(cursor)
 		assert.Equal(t, useCase.expect, matched, useCase.description)
 	}
 

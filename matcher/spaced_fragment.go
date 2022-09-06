@@ -26,14 +26,21 @@ func (d *SpaceFragmentFold) Match(cursor *parsly.Cursor) int {
 			return 0
 		}
 		pos += len(value)
+
+		if i == len(d.values)-1 { //last seq matched
+			break
+		}
+
 		if i != len(d.values)-1 {
+			spaceCounter := 0
 			for j := pos; j < inputLen-1; j++ {
 				if !IsWhiteSpace(cursor.Input[j]) {
-					if j > 0 {
+					if spaceCounter > 0 {
 						break
 					}
 					return 0
 				}
+				spaceCounter++
 				pos++
 			}
 		}
@@ -66,15 +73,17 @@ func (d *SpacedFragment) Match(cursor *parsly.Cursor) int {
 		if i == len(d.values)-1 { //last seq matched
 			break
 		}
+		spaceCounter := 0
 
 		for j := pos; j < inputLen-1; j++ {
 			if !IsWhiteSpace(cursor.Input[j]) {
-				if j > 0 {
+				if spaceCounter > 0 {
 					break
 				}
 				return 0
 			}
 			pos++
+			spaceCounter++
 		}
 
 	}
