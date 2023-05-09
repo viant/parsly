@@ -91,6 +91,15 @@ func TestNewBlock(t *testing.T) {
 			input:       []byte(`;123;`),
 			matched:     5,
 		},
+
+		{
+			description: "quteed",
+			begin:       '\'',
+			end:         '\'',
+			escape:      '\\',
+			input:       []byte(`'ew'rere`),
+			matched:     4,
+		},
 	}
 
 	for _, useCase := range useCases {
