@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-//Cursor represents a location
+// Cursor represents a location
 type Cursor struct {
 	Path      string
 	offset    int
@@ -13,9 +13,10 @@ type Cursor struct {
 	InputSize int
 	Pos       int
 	lastMatch TokenMatch
+	OnError   func(err error, cur *Cursor, destNode interface{}) error
 }
 
-//NewError returns error for expected tokens
+// NewError returns error for expected tokens
 func (c *Cursor) NewError(expectedTokens ...*Token) error {
 	var names = make([]string, 0)
 	for _, token := range expectedTokens {
@@ -24,7 +25,7 @@ func (c *Cursor) NewError(expectedTokens ...*Token) error {
 	return fmt.Errorf("invalid token, expected: [%v] at  pos: %v", strings.Join(names, ","), c.offset+c.Pos)
 }
 
-//TokenMatch returns updated lastMatch
+// TokenMatch returns updated lastMatch
 func (c *Cursor) TokenMatch(token *Token, matchSize int) *TokenMatch {
 	c.lastMatch.Token = token
 	c.lastMatch.Offset = c.Pos
@@ -32,12 +33,12 @@ func (c *Cursor) TokenMatch(token *Token, matchSize int) *TokenMatch {
 	return &c.lastMatch
 }
 
-//HasMore returns true if it has more
+// HasMore returns true if it has more
 func (c *Cursor) HasMore() bool {
 	return c.Pos < c.InputSize
 }
 
-//MatchAfterOptional matcher first candidate after optional token lastMatch
+// MatchAfterOptional matcher first candidate after optional token lastMatch
 func (c *Cursor) MatchAfterOptional(optional *Token, candidates ...*Token) *TokenMatch {
 	if !c.HasMore() {
 		return c.TokenMatch(EOFToken, 0)
@@ -47,7 +48,7 @@ func (c *Cursor) MatchAfterOptional(optional *Token, candidates ...*Token) *Toke
 	return c.MatchAny(candidates...)
 }
 
-//MatchAny matches the first of the candidates
+// MatchAny matches the first of the candidates
 func (c *Cursor) MatchAny(candidates ...*Token) *TokenMatch {
 	if !c.HasMore() {
 		return c.TokenMatch(EOFToken, 0)
@@ -69,7 +70,7 @@ loop:
 	return c.TokenMatch(InvalidToken, 0)
 }
 
-//MatchOne tries to lastMatch a candidate, it returns a lastMatch.
+// MatchOne tries to lastMatch a candidate, it returns a lastMatch.
 func (c *Cursor) MatchOne(token *Token) *TokenMatch {
 	if !c.HasMore() {
 		return c.TokenMatch(EOFToken, 0)
@@ -83,7 +84,7 @@ func (c *Cursor) MatchOne(token *Token) *TokenMatch {
 	return c.TokenMatch(InvalidToken, 0)
 }
 
-//FindMatch tries to find a token match in the cursor
+// FindMatch tries to find a token match in the cursor
 func (c *Cursor) FindMatch(token *Token) *TokenMatch {
 	pos := c.Pos
 	for {
@@ -103,7 +104,7 @@ func (c *Cursor) FindMatch(token *Token) *TokenMatch {
 	return c.TokenMatch(InvalidToken, 0)
 }
 
-//NewCursor creates a location
+// NewCursor creates a location
 func NewCursor(path string, input []byte, offset int) *Cursor {
 	return &Cursor{Path: path, Input: input, offset: offset, InputSize: len(input)}
 }
