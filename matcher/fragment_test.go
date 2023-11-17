@@ -108,6 +108,27 @@ func TestNewFragment(t *testing.T) {
 			input:       []byte("abc"),
 			matched:     true,
 		},
+		{
+			description: "embed match",
+			fragments:   "abc",
+			input:       []byte("abcd"),
+			matched:     true,
+			options: []Option{
+				&option.Case{Sensitive: false, Embed: true},
+			},
+		},
+		{
+			description: "non embed match",
+			fragments:   "abc",
+			input:       []byte("abcd"),
+			matched:     false,
+		},
+		{
+			description: "eof  match",
+			fragments:   "abc",
+			input:       []byte("abc"),
+			matched:     true,
+		},
 	}
 
 	for _, useCase := range useCases {

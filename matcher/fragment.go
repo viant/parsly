@@ -8,6 +8,7 @@ import (
 )
 
 type FragmentFold struct {
+	embed bool //can be embedded within word
 	value []byte
 	size  int
 }
@@ -16,6 +17,15 @@ func (d *FragmentFold) Match(cursor *parsly.Cursor) int {
 	matchEnd := cursor.Pos + d.size
 	if matchEnd <= cursor.InputSize {
 		if MatchFold(d.value, cursor.Input, 0, cursor.Pos) {
+			if d.embed {
+				return d.size
+			}
+			if matchEnd >= len(cursor.Input) {
+				return d.size
+			}
+			if !IsWhiteSpace(cursor.Input[matchEnd]) {
+				return 0
+			}
 			return d.size
 		}
 	}
@@ -23,6 +33,7 @@ func (d *FragmentFold) Match(cursor *parsly.Cursor) int {
 }
 
 type Fragment struct {
+	embed bool //can be embedded within word
 	value []byte
 	size  int
 }
@@ -31,24 +42,35 @@ func (d *Fragment) Match(cursor *parsly.Cursor) int {
 	matchEnd := cursor.Pos + d.size
 	if matchEnd <= cursor.InputSize {
 		if bytes.Equal(cursor.Input[cursor.Pos:matchEnd], d.value) {
+			if d.embed {
+				return d.size
+			}
+			if matchEnd >= len(cursor.Input) {
+				return d.size
+			}
+			if !IsWhiteSpace(cursor.Input[matchEnd]) {
+				return 0
+			}
 			return d.size
 		}
 	}
 	return 0
 }
 
-//NewFragments creates FragmentFold matcher
+// NewFragments creates FragmentFold matcher
 func NewFragment(value string, options ...Option) parsly.Matcher {
 	caseOpt := &option.Case{}
 	if AssignOption(options, &caseOpt) && !caseOpt.Sensitive {
 		return &FragmentFold{
 			value: []byte(value),
 			size:  len(value),
+			embed: caseOpt.Embed,
 		}
 	}
 	return &Fragment{
 		value: []byte(value),
 		size:  len(value),
+		embed: caseOpt.Embed,
 	}
 }
 
@@ -58,7 +80,7 @@ const (
 	uint64LowerMask = uint64(0x2020202020202020)
 )
 
-//MatchFold returns true if source  is matched with target (case insensitive)
+// MatchFold returns true if source  is matched with target (case insensitive)
 func MatchFold(target, source []byte, targetOffset, sourceOffset int) bool {
 	bytesToCheck := len(target) - targetOffset
 	if sourceOffset+bytesToCheck > len(source) {
