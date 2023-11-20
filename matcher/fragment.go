@@ -29,7 +29,7 @@ func (d *FragmentFold) Match(cursor *parsly.Cursor) int {
 			if matchEnd >= len(cursor.Input) {
 				return d.size
 			}
-			if !IsWhiteSpace(cursor.Input[matchEnd]) {
+			if IsLetter(cursor.Input[matchEnd]) || IsDigit(cursor.Input[matchEnd]) {
 				return 0
 			}
 			return d.size
@@ -61,7 +61,7 @@ func (d *Fragment) Match(cursor *parsly.Cursor) int {
 			if matchEnd >= len(cursor.Input) {
 				return d.size
 			}
-			if !IsWhiteSpace(cursor.Input[matchEnd]) {
+			if IsLetter(cursor.Input[matchEnd]) || IsDigit(cursor.Input[matchEnd]) {
 				return 0
 			}
 			return d.size
