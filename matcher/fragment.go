@@ -8,16 +8,22 @@ import (
 )
 
 type FragmentFold struct {
-	embed bool //can be embedded within word
+	embed *bool //can be embedded within word
 	value []byte
 	size  int
 }
 
+func (d *FragmentFold) isEmbed() bool {
+	if d.embed == nil {
+		return true
+	}
+	return *d.embed
+}
 func (d *FragmentFold) Match(cursor *parsly.Cursor) int {
 	matchEnd := cursor.Pos + d.size
 	if matchEnd <= cursor.InputSize {
 		if MatchFold(d.value, cursor.Input, 0, cursor.Pos) {
-			if d.embed {
+			if d.isEmbed() {
 				return d.size
 			}
 			if matchEnd >= len(cursor.Input) {
@@ -33,16 +39,23 @@ func (d *FragmentFold) Match(cursor *parsly.Cursor) int {
 }
 
 type Fragment struct {
-	embed bool //can be embedded within word
+	embed *bool //can be embedded within word
 	value []byte
 	size  int
+}
+
+func (d *Fragment) isEmbed() bool {
+	if d.embed == nil {
+		return true
+	}
+	return *d.embed
 }
 
 func (d *Fragment) Match(cursor *parsly.Cursor) int {
 	matchEnd := cursor.Pos + d.size
 	if matchEnd <= cursor.InputSize {
 		if bytes.Equal(cursor.Input[cursor.Pos:matchEnd], d.value) {
-			if d.embed {
+			if d.isEmbed() {
 				return d.size
 			}
 			if matchEnd >= len(cursor.Input) {

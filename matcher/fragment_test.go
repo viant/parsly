@@ -61,6 +61,7 @@ func BenchmarkEqualFold(b *testing.B) {
 }
 
 func TestNewFragment(t *testing.T) {
+	flag := false
 	useCases := []struct {
 		description string
 		fragments   string
@@ -114,20 +115,25 @@ func TestNewFragment(t *testing.T) {
 			input:       []byte("abcd"),
 			matched:     true,
 			options: []Option{
-				&option.Case{Sensitive: false, Embed: true},
+				&option.Case{Sensitive: false},
 			},
 		},
-		{
-			description: "non embed match",
-			fragments:   "abc",
-			input:       []byte("abcd"),
-			matched:     false,
-		},
+
 		{
 			description: "eof  match",
 			fragments:   "abc",
 			input:       []byte("abc"),
 			matched:     true,
+		},
+
+		{
+			description: "non embed match",
+			fragments:   "abc",
+			input:       []byte("abcd"),
+			options: []Option{
+				&option.Case{Sensitive: false, Embed: &flag},
+			},
+			matched: false,
 		},
 	}
 
