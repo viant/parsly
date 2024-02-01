@@ -22,7 +22,22 @@ func (c *Cursor) NewError(expectedTokens ...*Token) error {
 	for _, token := range expectedTokens {
 		names = append(names, token.Name)
 	}
-	return fmt.Errorf("invalid token, expected: [%v] at  pos: %v", strings.Join(names, ","), c.offset+c.Pos)
+
+	var framgnet = make([]byte, 0, 22)
+	if c.Pos < len(c.Input) {
+		minPos := max(c.Pos-10, 0)
+		maxPos := min(len(c.Input)-1, c.Pos+10)
+		for i := minPos; i < maxPos; i++ {
+			if i == c.Pos {
+				framgnet = append(framgnet, '*')
+			}
+			framgnet = append(framgnet, c.Input[i])
+			if i == c.Pos {
+				framgnet = append(framgnet, '*')
+			}
+		}
+	}
+	return fmt.Errorf("invalid token around %s,  expected: [%v] at  pos: %v", string(framgnet), strings.Join(names, ","), c.offset+c.Pos)
 }
 
 // TokenMatch returns updated lastMatch
