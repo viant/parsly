@@ -20,7 +20,7 @@ func TestCursor_NewError(t *testing.T) {
 			description: "error number",
 			input:       []byte("aafdsfds"),
 			token:       parsly.NewToken(1, "number", matcher.NewNumber()),
-			expect:      "invalid token, expected: [number] at  pos: 0",
+			expect:      "invalid token around *a*afdsfd,  expected: [number] at  pos: 0",
 		},
 	}
 
