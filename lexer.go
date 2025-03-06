@@ -1,5 +1,6 @@
 package parsly
 
+// Lexer is a struct that holds the tokens
 type Lexer struct {
 	tokens map[string]*Token
 }
